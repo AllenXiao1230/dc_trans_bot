@@ -5,7 +5,7 @@ from core import check
 import json
 import os, random
 
-from more.function import translate_text
+from function import translate_text
 
 with open('setting.json', 'r', encoding='utf8') as jfile:
 	jdata = json.load(jfile)

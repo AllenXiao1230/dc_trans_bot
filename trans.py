@@ -1,4 +1,4 @@
-from more.function import translate_text
+from function import translate_text
 
 
 trans_text = translate_text('你好')
