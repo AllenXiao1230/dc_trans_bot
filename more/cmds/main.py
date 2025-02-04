@@ -5,6 +5,8 @@ from core import check
 import json
 import os, random
 
+from more.function import translate_text
+
 with open('setting.json', 'r', encoding='utf8') as jfile:
 	jdata = json.load(jfile)
 
@@ -43,7 +45,6 @@ class Main(Cog_Extension):
 		else: await ctx.message.delete()
 		await ctx.send(content)
 
-
 	@commands.command()
 	async def info(self, ctx):
 		embed = discord.Embed(title="About P_Base-Bot", description="Made Bot Easier !", color=0x28ddb0)
@@ -56,7 +57,6 @@ class Main(Cog_Extension):
 		embed.add_field(name="Prefix", value=jdata['Prefix'], inline=False)
 		embed.set_footer(text="Made with ❤")
 		await ctx.send(embed=embed)
-
 
 def setup(bot):
 	bot.add_cog(Main(bot))
