@@ -46,7 +46,7 @@ async def on_message(msg):
 
         await msg.channel.send(embed=embed)
 
-    await bot.process_commands(msg)  # 確保指令仍可運行
+    
 
 # 開啟/關閉翻譯功能
 @bot.command()
@@ -54,37 +54,48 @@ async def toggle(ctx):
     global auto_translate
     auto_translate = not auto_translate
     status = "開啟" if auto_translate else "關閉"
-    await ctx.send(f"🔄 自動翻譯功能已{status}！")
+    
+    embed = discord.Embed(title="🔄 自動翻譯", description=f"自動翻譯功能已**{status}**！", color=0x2ecc71)
+    await ctx.send(embed=embed)
 
 # 新增翻譯語言
 @bot.command()
 async def add_lang(ctx, lang: str = None):
-    if not lang:  # 如果 lang 為 None（使用者沒有輸入語言）
-        await ctx.send("⚠️ 請輸入語言代碼，例如：`#add_lang fr`")
+    if not lang:
+        embed = discord.Embed(description="⚠️ 請輸入語言代碼，例如：`#add_lang fr`\n📌 使用 `#lang_list` 查看可用語言", color=0xf1c40f)
+        await ctx.send(embed=embed)
         return
 
     result = add_language(lang)
-    await ctx.send(result)
+    embed = discord.Embed(description=result, color=0x2ecc71)
+    await ctx.send(embed=embed)
 
+# 刪除翻譯語言
 @bot.command()
 async def remove_lang(ctx, lang: str = None):
-    if not lang:  # 如果 lang 為 None（使用者沒有輸入語言）
-        await ctx.send("⚠️ 請輸入語言代碼，例如：`#remove_lang es`")
+    if not lang:
+        embed = discord.Embed(description="⚠️ 請輸入語言代碼，例如：`#remove_lang es`\n📌 使用 `#lang_list` 查看可用語言", color=0xf1c40f)
+        await ctx.send(embed=embed)
         return
 
     result = remove_language(lang)
-    await ctx.send(result)
+    embed = discord.Embed(description=result, color=0xe74c3c)
+    await ctx.send(embed=embed)
 
 # 查看目前支援的語言清單
 @bot.command()
 async def lang_list(ctx):
     enabled, available = get_language_lists()
     
-    enabled_text = "\n".join([f"✅ {code} {name}" for code, name in enabled.items()])
-    available_text = "\n".join([f"➕ {code} {name}" for code, name in available.items()])
+    enabled_text = "\n".join([f"✅ {name}" for _, name in enabled.items()])
+    available_text = "\n".join([f"➕ {name}" for _, name in available.items()])
 
-    message = f"🌍 **目前支援的翻譯語言：**\n{enabled_text}\n\n📌 **可以新增的語言：**\n{available_text}"
-    await ctx.send(message)
+    embed = discord.Embed(title="🌍 翻譯語言列表", color=0x2ecc71)
+    embed.add_field(name="✅ **目前支援的語言**", value=enabled_text, inline=False)
+    embed.add_field(name="📌 **可以新增的語言**", value=available_text, inline=False)
+    embed.set_footer(text="🔄 使用 #add_lang <語言代碼> 來新增語言")
+
+    await ctx.send(embed=embed)
 
 @bot.command()
 async def help(ctx):
@@ -114,7 +125,8 @@ async def help(ctx):
 # 測試指令
 @bot.command()
 async def say(ctx, *, text: str):
-    await ctx.send(text)
+    embed = discord.Embed(description=text, color=0x95a5a6)
+    await ctx.send(embed=embed)
 
 
 if __name__ == "__main__":
