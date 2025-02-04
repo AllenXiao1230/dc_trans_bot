@@ -5,8 +5,11 @@ import discord
 from discord.ext import commands
 import json
 import os
+from dotenv import load_dotenv
 from function import translate_text, get_language_lists, add_language, remove_language
 
+# 讀取 .env 檔案
+load_dotenv()
 
 # 讀取設定檔
 with open('setting.json', 'r', encoding='utf8') as jfile:
@@ -21,7 +24,10 @@ bot = commands.Bot(command_prefix=jdata['Prefix'], intents=intents, help_command
 auto_translate = True  # 是否自動翻譯
 
 # 讀取 Token（避免公開 Token）
-TOKEN = jdata["Token"]  # 或從設定檔讀取
+TOKEN = os.getenv("TOKEN")  # 或從設定檔讀取
+if not TOKEN:
+    raise ValueError("❌ 無法取得 Discord Bot Token，請檢查 .env 是否正確設定！")
+
 
 @bot.event
 async def on_ready():
