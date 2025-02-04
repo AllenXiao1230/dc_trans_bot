@@ -113,4 +113,5 @@ async def say(ctx, *, text: str):
     await ctx.send(text)
 
 if __name__ == "__main__":
+    port = int(os.getenv('PORT', 5000))
     bot.run(TOKEN)
