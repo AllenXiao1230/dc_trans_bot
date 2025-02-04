@@ -3,6 +3,7 @@ from discord.ext import commands
 import json
 import os
 from function import translate_text, get_language_lists, add_language, remove_language
+from flask import Flask
 
 # 讀取設定檔
 with open('setting.json', 'r', encoding='utf8') as jfile:
@@ -112,6 +113,12 @@ async def help(ctx):
 async def say(ctx, *, text: str):
     await ctx.send(text)
 
+app = Flask(__name__)
+@app.route('/')
+def home():
+    return "Hello, Render!"
+
 if __name__ == "__main__":
-    port = int(os.getenv('PORT', 5000))
+    port = int(os.getenv("PORT", 5000))
+    app.run(host="0.0.0.0", port=port)
     bot.run(TOKEN)
