@@ -1,4 +1,5 @@
 from deep_translator import GoogleTranslator
+import discord
 
 # 所有支援的語言（語言代碼: 語言名稱）
 LANGUAGE_NAMES = {
@@ -22,12 +23,13 @@ active_languages = ["zh-TW", "en", "es", "ja"]
 # 翻譯函式
 def translate_text(text):
     try:
-        results = {}
+        embed = discord.Embed(color=0x3498db)
         for lang in active_languages:
             translated = GoogleTranslator(source='auto', target=lang).translate(text)
-            results[lang] = translated
-
-        return "\n".join([f"**{LANGUAGE_NAMES.get(lang, '未知語言')}**: {results[lang]}" for lang in active_languages])
+            embed.add_field(name=f"**{LANGUAGE_NAMES.get(lang, '未知語言')}**", value=translated, inline=False)
+            embed.set_footer(text="🔄 Auto Translate")
+            
+        return embed  # 回傳 Embed 物件
     except Exception as e:
         return f"錯誤: {str(e)}"
 
